@@ -64,7 +64,7 @@ class ListAbsenScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(72),
+        preferredSize: const Size.fromHeight(64),
         child: AppBarWidget(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,7 +81,7 @@ class ListAbsenScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                "17",
+                DateFormat('dd').format(DateTime.now()),
                 style: TextStyleTemplate.boldGray(size: 32),
               ),
               Column(
@@ -89,11 +89,11 @@ class ListAbsenScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "February",
+                    DateFormat('MMMM').format(DateTime.now()),
                     style: TextStyleTemplate.mediumPrimary(size: 18),
                   ),
                   Text(
-                    "2022",
+                    DateFormat('yyyy').format(DateTime.now()),
                     style: TextStyleTemplate.mediumGray(size: 18),
                   ),
                 ],
@@ -103,10 +103,7 @@ class ListAbsenScreen extends StatelessWidget {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 4,
-          horizontal: 12,
-        ),
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 4),
         child: ListView.builder(
           itemCount: theData.length,
           itemBuilder: (context, index) {

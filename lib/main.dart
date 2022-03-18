@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:min_absen/models/present_model.dart';
 import 'package:min_absen/models/profile_model.dart';
 import 'package:min_absen/models/users_model.dart';
 import 'package:min_absen/screens/detail_employee_screen.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<UsersModel>(create: (context) => UsersModel()),
         ChangeNotifierProvider<ProfileModel>(create: (context) => ProfileModel()),
+        ChangeNotifierProvider<PresentModel>(create: (context) => PresentModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

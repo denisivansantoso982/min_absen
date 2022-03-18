@@ -1,12 +1,13 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:min_absen/models/data/present_data.dart';
 import 'package:min_absen/models/data/users_data.dart';
+import 'package:min_absen/models/present_model.dart';
 import 'package:min_absen/models/users_model.dart';
-import 'package:min_absen/templates/colour_template.dart';
-import 'package:min_absen/templates/text_style_template.dart';
 import 'package:provider/provider.dart';
 
 DatabaseReference usersReference = FirebaseDatabase.instance.ref('users');
+DatabaseReference presentReference = FirebaseDatabase.instance.ref('present');
 
 Future<DataSnapshot?> checkUserByEmail(String? email) async {
   final DataSnapshot dataSnapshot =
@@ -40,29 +41,6 @@ Future<void> getAllUsers(BuildContext context) async {
     });
   } catch (error) {
     Future.error(error);
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          "Error!",
-          style: TextStyleTemplate.boldGray(size: 18),
-        ),
-        content: Text(
-          error.toString(),
-          style: TextStyleTemplate.regularGray(size: 14),
-        ),
-        actions: [
-          MaterialButton(
-            color: ColourTemplate.primaryColour,
-            child: Text(
-              "OKE",
-              style: TextStyleTemplate.mediumWhite(size: 16),
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -79,4 +57,25 @@ Future<void> doUpdateUser(UsersData user) async {
     'level': user.role,
     'quotes': user.quotes,
   }).catchError((error) => Future.error(error));
+}
+
+Future<void> getAllPresentData(BuildContext context) async {
+  try {
+    presentReference.onValue.listen((event) {
+      Provider.of<PresentModel>(context, listen: false).clearAllPresentData();
+      List<DataSnapshot> data = event.snapshot.children.toList();
+      for (var element in data) {
+        Provider.of<PresentModel>(context).getAllPresentData(
+          PresentData(
+            uid: element.key.toString(),
+            users: element.child('users').toString(),
+            presentTime: int.parse(element.child('present_time').toString()),
+            homeTime: int.parse(element.child('home_time').toString()),
+          )
+        );
+      }
+    });
+  } catch (error) {
+    Future.error(error);
+  }
 }

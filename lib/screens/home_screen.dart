@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:min_absen/firebase/database.dart';
 import 'package:min_absen/screens/profile_screen.dart';
 import 'package:min_absen/templates/colour_template.dart';
+import 'package:min_absen/templates/text_style_template.dart';
 import 'package:min_absen/widgets/appbar_widget.dart';
 import 'package:min_absen/widgets/employee_card_widget.dart';
 import 'package:min_absen/widgets/schedule_card_widget.dart';
@@ -14,13 +15,70 @@ class HomeScreen extends StatelessWidget {
   static const String route = '/home_screen';
   static DateTime today = DateTime.now();
 
-  _doGetUsers(context) {
-    getAllUsers(context);
+  _doGetUsers(context) async {
+    try {
+      await getAllUsers(context);
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            "Terjadi Kesalahan!",
+            style: TextStyleTemplate.boldGray(size: 18),
+          ),
+          content: Text(
+            error.toString(),
+            style: TextStyleTemplate.regularGray(size: 14),
+          ),
+          actions: [
+            MaterialButton(
+              color: ColourTemplate.primaryColour,
+              child: Text(
+                "OKE",
+                style: TextStyleTemplate.mediumWhite(size: 16),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  _doGetPresent(context) async {
+    try {
+      await getAllPresentData(context);
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            "Terjadi Kesalahan!",
+            style: TextStyleTemplate.boldGray(size: 18),
+          ),
+          content: Text(
+            error.toString(),
+            style: TextStyleTemplate.regularGray(size: 14),
+          ),
+          actions: [
+            MaterialButton(
+              color: ColourTemplate.primaryColour,
+              child: Text(
+                "OKE",
+                style: TextStyleTemplate.mediumWhite(size: 16),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     _doGetUsers(context);
+    _doGetPresent(context);
     return Scaffold(
       backgroundColor: ColourTemplate.whiteColour,
       appBar: PreferredSize(
@@ -31,11 +89,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               Text(
                 DateFormat('dd').format(today),
-                style: const TextStyle(
-                  fontSize: 32,
-                  color: ColourTemplate.grayColour,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyleTemplate.boldGray(size: 32),
               ),
               const SizedBox(
                 width: 4,
@@ -46,20 +100,10 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     DateFormat('MMMM').format(today),
-                    style: const TextStyle(
-                      color: ColourTemplate.primaryColour,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: TextStyleTemplate.mediumPrimary(size: 18),
                   ),
-                  Text(
-                    DateFormat('yyyy').format(today),
-                    style: const TextStyle(
-                      color: ColourTemplate.grayColour,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  Text(DateFormat('yyyy').format(today),
+                      style: TextStyleTemplate.mediumGray(size: 18)),
                 ],
               ),
               Flexible(
