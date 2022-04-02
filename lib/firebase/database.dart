@@ -59,20 +59,27 @@ Future<void> doUpdateUser(UsersData user) async {
   }).catchError((error) => Future.error(error));
 }
 
-Future<void> getAllPresentData(BuildContext context) async {
+Future<void> getAllPresentData(BuildContext context, DateTime? theDate) async {
   try {
-    presentReference.onValue.listen((event) {
+    DateTime today = DateTime.now();
+    DateTime firstDate = theDate ?? DateTime(today.year, today.month, today.day);
+    DateTime secondDate = theDate != null ? theDate.add(const Duration(hours: 24)) : today.add(const Duration(hours: 24));
+    presentReference
+    .orderByChild('present_at')
+    .endAt(secondDate.millisecondsSinceEpoch, key: 'present_at')
+    .startAt(firstDate.millisecondsSinceEpoch, key: 'present_at')
+    .onValue.listen((event) {
       Provider.of<PresentModel>(context, listen: false).clearAllPresentData();
       List<DataSnapshot> data = event.snapshot.children.toList();
       for (var element in data) {
-        Provider.of<PresentModel>(context).getAllPresentData(
-          PresentData(
-            uid: element.key.toString(),
-            users: element.child('users').toString(),
-            presentTime: int.parse(element.child('present_time').toString()),
-            homeTime: int.parse(element.child('home_time').toString()),
-          )
-        );
+        Provider.of<PresentModel>(context, listen: false).getAllPresentData(PresentData(
+          uid: element.key.toString(),
+          users: element.child('users').value.toString(),
+          presentTime: int.parse(element.child('present_at').value.toString()),
+          homeTime: element.child('home_at').value != null
+              ? int.parse(element.child('home_at').value.toString())
+              : 0,
+        ));
       }
     });
   } catch (error) {

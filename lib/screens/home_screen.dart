@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
 
   _doGetPresent(context) async {
     try {
-      await getAllPresentData(context);
+      await getAllPresentData(context, null);
     } catch (error) {
       showDialog(
         context: context,

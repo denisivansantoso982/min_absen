@@ -12,28 +12,6 @@ class ListEmployeeScreen extends StatelessWidget {
   const ListEmployeeScreen({Key? key}) : super(key: key);
 
   static const String route = '/list_employee_screen';
-  static List<Map<String, dynamic>> theData = <Map<String, dynamic>>[
-    {
-      "name": "Denis",
-      "pretend": "7:30",
-      "home": "17:03"
-    },
-    {
-      "name": "Epan",
-      "pretend": "7:30",
-      "home": "17:03"
-    },
-    {
-      "name": "Bagus",
-      "pretend": "7:30",
-      "home": "17:03"
-    },
-    {
-      "name": "Yoel",
-      "pretend": "7:30",
-      "home": "17:03"
-    }
-  ];
 
   @override
   Widget build(BuildContext context) {
