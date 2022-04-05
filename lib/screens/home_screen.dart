@@ -6,7 +6,7 @@ import 'package:min_absen/templates/colour_template.dart';
 import 'package:min_absen/templates/text_style_template.dart';
 import 'package:min_absen/widgets/appbar_widget.dart';
 import 'package:min_absen/widgets/employee_card_widget.dart';
-import 'package:min_absen/widgets/schedule_card_widget.dart';
+import 'package:min_absen/widgets/agenda_card_widget.dart';
 import 'package:min_absen/widgets/today_card_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -102,8 +102,10 @@ class HomeScreen extends StatelessWidget {
                     DateFormat('MMMM').format(today),
                     style: TextStyleTemplate.mediumPrimary(size: 18),
                   ),
-                  Text(DateFormat('yyyy').format(today),
-                      style: TextStyleTemplate.mediumGray(size: 18)),
+                  Text(
+                    DateFormat('yyyy').format(today),
+                    style: TextStyleTemplate.mediumGray(size: 18),
+                  ),
                 ],
               ),
               Flexible(
@@ -143,8 +145,8 @@ class HomeScreen extends StatelessWidget {
             TodayCardWidget(),
             // Employee Card
             EmployeeCardWidget(),
-            // Schedule Card
-            ScheduleCardWidget(),
+            // Agenda Card
+            AgendaCardWidget(),
           ],
         ),
       ),

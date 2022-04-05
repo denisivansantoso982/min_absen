@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:min_absen/screens/new_agenda_screen.dart';
 import 'package:min_absen/templates/colour_template.dart';
+import 'package:min_absen/templates/text_style_template.dart';
 import 'card_menu_widget.dart';
 
-class ScheduleCardWidget extends StatelessWidget {
-  const ScheduleCardWidget({Key? key}) : super(key: key);
+class AgendaCardWidget extends StatelessWidget {
+  const AgendaCardWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class ScheduleCardWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Jadwal",
+                "Agenda",
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -28,7 +30,7 @@ class ScheduleCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Jadwal Besok",
+                    "Agenda Selanjutnya",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -37,28 +39,19 @@ class ScheduleCardWidget extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         "18",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyleTemplate.boldWhite(size: 24),
                       ),
                       Column(
-                        children: const [
+                        children: [
                           Text(
                             "Feb",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
+                            style: TextStyleTemplate.mediumWhite(size: 14),
                           ),
                           Text(
                             "2022",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400),
+                            style: TextStyleTemplate.regularWhite(size: 14),
                           ),
                         ],
                       ),
@@ -79,13 +72,9 @@ class ScheduleCardWidget extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       alignment: Alignment.center,
-                      child: const Text(
+                      child: Text(
                         "Lihat Detail",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: ColourTemplate.negativeColour,
-                        ),
+                        style: TextStyleTemplate.mediumNegative(size: 14),
                       ),
                     ),
                   ),
@@ -97,29 +86,19 @@ class ScheduleCardWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 8.0),
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
                   "08:00 - 17:00",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: TextStyleTemplate.regularWhite(size: 12),
                 ),
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: const [
-                  Text(
-                    "Kerja Bakti",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Kerja Bakti",
+                  style: TextStyleTemplate.regularWhite(size: 18),
+                ),
               ),
               Container(
                 decoration: const BoxDecoration(
@@ -129,17 +108,13 @@ class ScheduleCardWidget extends StatelessWidget {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () => Navigator.of(context).pushNamed(NewAgendaScreen.route),
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       alignment: Alignment.center,
-                      child: const Text(
+                      child: Text(
                         "Tambah Agenda",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: ColourTemplate.negativeColour,
-                        ),
+                        style: TextStyleTemplate.mediumNegative(size: 14),
                       ),
                     ),
                   ),

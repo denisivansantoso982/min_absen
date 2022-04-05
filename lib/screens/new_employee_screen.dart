@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:min_absen/firebase/database.dart';
+import 'package:min_absen/templates/alert_dialog_template.dart';
 import 'package:min_absen/templates/colour_template.dart';
 import 'package:min_absen/templates/text_style_template.dart';
 import 'package:min_absen/widgets/appbar_widget.dart';
@@ -39,7 +40,7 @@ class _NewEmployeeScreenState extends State<NewEmployeeScreen> {
     });
   }
 
-  Future<void> _addNewEmployee(BuildContext context) async {
+  void _addNewEmployee(BuildContext context) async {
     try {
       if (_doValidation(context)) {
         setState(() {
@@ -47,30 +48,20 @@ class _NewEmployeeScreenState extends State<NewEmployeeScreen> {
         });
         await checkUserByEmail(theEmail.text).then((value) async {
           if (value != null) {
-            showDialog(
+            AlertDialogTemplate().showTheDialog(
               context: context,
-              builder: (context) => AlertDialog(
-                title: Text(
-                  "Perhatian!",
-                  style: TextStyleTemplate.mediumGray(size: 18),
-                ),
-                content: Text(
-                  "Pengguna dengan alamat email ini sudah terdaftar!",
-                  style: TextStyleTemplate.regularGray(size: 16),
-                ),
-                actionsPadding: const EdgeInsets.symmetric(horizontal: 4),
-                insetPadding: const EdgeInsets.symmetric(horizontal: 32),
-                actions: [
-                  MaterialButton(
-                    color: ColourTemplate.primaryColour,
-                    child: Text(
-                      "OKE",
-                      style: TextStyleTemplate.mediumWhite(size: 16),
-                    ),
-                    onPressed: () => Navigator.of(context).pop(),
-                  )
-                ],
-              ),
+              title: "Perhatian!",
+              content: "Pengguna dengan alamat email ini sudah terdaftar!",
+              actions: [
+                MaterialButton(
+                  color: ColourTemplate.primaryColour,
+                  child: Text(
+                    "OKE",
+                    style: TextStyleTemplate.mediumWhite(size: 16),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              ],
             );
           } else {
             await doAddUsers({
@@ -81,60 +72,38 @@ class _NewEmployeeScreenState extends State<NewEmployeeScreen> {
               "email": theEmail.text,
               "level": theLevel.text
             }).then((value) {
-              showDialog(
+              AlertDialogTemplate().showTheDialog(
                 context: context,
-                builder: (context) => AlertDialog(
-                  title: Text(
-                    "Berhasil",
-                    style: TextStyleTemplate.mediumGray(size: 18),
+                title: "Berhasil",
+                content: "Data pengguna berhasil ditambahkan!",
+                actions: [
+                  MaterialButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    color: ColourTemplate.primaryColour,
+                    child: Text("OKE",
+                        style: TextStyleTemplate.mediumWhite(size: 16)),
                   ),
-                  content: Text(
-                    "Data pengguna berhasil ditambahkan!",
-                    style: TextStyleTemplate.regularGray(size: 16),
-                  ),
-                  actionsPadding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                  ),
-                  insetPadding: const EdgeInsets.symmetric(horizontal: 32),
-                  actions: [
-                    MaterialButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      color: ColourTemplate.primaryColour,
-                      child: Text("OKE",
-                          style: TextStyleTemplate.mediumWhite(size: 16)),
-                    ),
-                  ],
-                ),
+                ],
               );
             });
           }
         });
       }
     } catch (error) {
-      showDialog(
+      AlertDialogTemplate().showTheDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Terjadi kesalahan",
-            style: TextStyleTemplate.mediumGray(size: 18),
-          ),
-          content: Text(
-            error.toString(),
-            style: TextStyleTemplate.regularGray(size: 16),
-          ),
-          actionsPadding: const EdgeInsets.symmetric(horizontal: 4),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 32),
-          actions: [
-            MaterialButton(
-              color: ColourTemplate.primaryColour,
-              child: Text(
-                "OKE",
-                style: TextStyleTemplate.mediumWhite(size: 16),
-              ),
-              onPressed: () => Navigator.of(context).pop(),
-            )
-          ],
-        ),
+        title: "Terjadi Kesalahan",
+        content: error.toString(),
+        actions: [
+          MaterialButton(
+            color: ColourTemplate.primaryColour,
+            child: Text(
+              "OKE",
+              style: TextStyleTemplate.mediumWhite(size: 16),
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          )
+        ],
       );
     } finally {
       setState(() {
@@ -231,7 +200,7 @@ class _NewEmployeeScreenState extends State<NewEmployeeScreen> {
     return true;
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  void _selectDate(BuildContext context) async {
     final selectedDate = await showDatePicker(
       context: context,
       initialDate: dob,
@@ -317,431 +286,426 @@ class _NewEmployeeScreenState extends State<NewEmployeeScreen> {
           horizontal: 24,
           vertical: 4,
         ),
-        child: Column(
-          children: [
-            Form(
-              key: _formKey,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(.25),
-                      blurRadius: 4,
-                      offset: const Offset(2, 4),
-                    ),
-                  ],
+        child: Form(
+          key: _formKey,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(.25),
+                  blurRadius: 4,
+                  offset: const Offset(2, 4),
                 ),
-                margin: const EdgeInsets.only(
-                  top: 8,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 12,
-                ),
-                child: Column(
-                  children: [
-                    // *Name
-                    Container(
-                      margin: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Nama",
-                            style: TextStyle(
-                              color: ColourTemplate.grayColour,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          TextFormField(
-                            focusNode: theFocusName,
-                            controller: theName,
-                            decoration: const InputDecoration(
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                bottom: 4,
-                                top: 8,
-                              ),
-                              hintText: "Nama Lengkap",
-                              isDense: true,
-                            ),
-                            cursorColor: ColourTemplate.primaryColour,
-                            style: const TextStyle(
-                              color: ColourTemplate.primaryColour,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
+              ],
+            ),
+            margin: const EdgeInsets.only(
+              top: 8,
+            ),
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 12,
+            ),
+            child: Column(
+              children: [
+                // *Name
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Nama",
+                        style: TextStyle(
+                          color: ColourTemplate.grayColour,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    // *Date Of Birth
-                    Container(
-                      margin: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Tanggal Lahir",
-                            style: TextStyle(
-                              color: ColourTemplate.grayColour,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
+                      TextFormField(
+                        focusNode: theFocusName,
+                        controller: theName,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
                             ),
                           ),
-                          TextFormField(
-                            controller: theDateOfBirth,
-                            onTap: () => _selectDate(context),
-                            decoration: InputDecoration(
-                              border: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              suffix: Container(
-                                color: Colors.transparent,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    splashColor: Colors.transparent,
-                                    onTap: () => _selectDate(context),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 4),
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8)),
-                                      ),
-                                      child: const Icon(
-                                        Icons.calendar_today_outlined,
-                                        color: ColourTemplate.primaryColour,
-                                        size: 22,
-                                      ),
-                                    ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.only(
+                            bottom: 4,
+                            top: 8,
+                          ),
+                          hintText: "Nama Lengkap",
+                          isDense: true,
+                        ),
+                        cursorColor: ColourTemplate.primaryColour,
+                        style: const TextStyle(
+                          color: ColourTemplate.primaryColour,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // *Date Of Birth
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Tanggal Lahir",
+                        style: TextStyle(
+                          color: ColourTemplate.grayColour,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextFormField(
+                        controller: theDateOfBirth,
+                        onTap: () => _selectDate(context),
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          focusedBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          suffix: Container(
+                            color: Colors.transparent,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                onTap: () => _selectDate(context),
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                  ),
+                                  child: const Icon(
+                                    Icons.calendar_today_outlined,
+                                    color: ColourTemplate.primaryColour,
+                                    size: 22,
                                   ),
                                 ),
                               ),
-                              contentPadding: const EdgeInsets.only(
-                                bottom: 4,
-                                top: 8,
-                              ),
-                              hintText: "Nama Lengkap",
-                              isDense: true,
-                            ),
-                            readOnly: true,
-                            cursorColor: ColourTemplate.primaryColour,
-                            style: const TextStyle(
-                              color: ColourTemplate.primaryColour,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    // *Sex
-                    Container(
-                      margin: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Jenis Kelamin",
-                            style: TextStyle(
-                              color: ColourTemplate.grayColour,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          contentPadding: const EdgeInsets.only(
+                            bottom: 4,
+                            top: 8,
                           ),
-                          DropdownButtonFormField<String>(
-                            items: <String>["Pria", "Wanita"]
-                                .map<DropdownMenuItem<String>>(
-                                    (value) => DropdownMenuItem<String>(
-                                          child: Text(value),
-                                          value: value,
-                                        ))
-                                .toList(),
-                            onChanged: (value) => theSex.text = value!,
-                            focusNode: theFocusSex,
-                            style: TextStyleTemplate.mediumPrimary(size: 16),
-                            decoration: const InputDecoration(
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
-                              isDense: true,
-                              hintText: "Jenis Kelamin Anda",
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // *Email
-                    Container(
-                      margin: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Email",
-                            style: TextStyle(
-                              color: ColourTemplate.grayColour,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          TextFormField(
-                            focusNode: theFocusEmail,
-                            controller: theEmail,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                bottom: 4,
-                                top: 8,
-                              ),
-                              hintText: "Alamat Email",
-                              isDense: true,
-                            ),
-                            cursorColor: ColourTemplate.primaryColour,
-                            style: const TextStyle(
-                              color: ColourTemplate.primaryColour,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // *Quotes
-                    Container(
-                      margin: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Kata-Kata",
-                            style: TextStyle(
-                              color: ColourTemplate.grayColour,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          TextFormField(
-                            focusNode: theFocusQuotes,
-                            controller: theQuotes,
-                            maxLines: null,
-                            maxLength: null,
-                            keyboardType: TextInputType.multiline,
-                            decoration: const InputDecoration(
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                ),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                bottom: 4,
-                                top: 8,
-                              ),
-                              hintText: "Kata-kata",
-                              isDense: true,
-                            ),
-                            cursorColor: ColourTemplate.primaryColour,
-                            style: const TextStyle(
-                              color: ColourTemplate.primaryColour,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // *Level
-                    Container(
-                      margin: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Level",
-                            style: TextStyle(
-                              color: ColourTemplate.grayColour,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          DropdownButtonFormField<String>(
-                            items: <String>["Admin", "Karyawan"]
-                                .map<DropdownMenuItem<String>>(
-                                    (value) => DropdownMenuItem<String>(
-                                          child: Text(value),
-                                          value: value,
-                                        ))
-                                .toList(),
-                            onChanged: (value) => theLevel.text = value!,
-                            focusNode: theFocusLevel,
-                            style: TextStyleTemplate.mediumPrimary(size: 16),
-                            decoration: const InputDecoration(
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: ColourTemplate.primaryColour,
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
-                              isDense: true,
-                              hintText: "Level Keanggotaan",
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // *Done Button
-                    Visibility(
-                      visible: !visibleLoadingPanel,
-                      child: Container(
-                        margin: const EdgeInsets.all(12),
-                        decoration: const BoxDecoration(
+                          isDense: true,
+                        ),
+                        readOnly: true,
+                        cursorColor: ColourTemplate.primaryColour,
+                        style: const TextStyle(
                           color: ColourTemplate.primaryColour,
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            splashColor: Colors.black.withOpacity(.25),
-                            highlightColor: Colors.black.withOpacity(.25),
-                            onTap: () => _addNewEmployee(context),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              alignment: Alignment.center,
-                              child: const Text(
-                                "TAMBAHKAN",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ),
-                    // *Loading Panel
-                    Visibility(
-                      visible: visibleLoadingPanel,
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.all(12),
-                        height: 36,
-                        width: 36,
-                        child: const CircularProgressIndicator(
-                          color: ColourTemplate.primaryColour,
-                          strokeWidth: 4,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                // *Sex
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Jenis Kelamin",
+                        style: TextStyle(
+                          color: ColourTemplate.grayColour,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      DropdownButtonFormField<String>(
+                        items: <String>["Pria", "Wanita"]
+                            .map<DropdownMenuItem<String>>(
+                                (value) => DropdownMenuItem<String>(
+                                      child: Text(value),
+                                      value: value,
+                                    ))
+                            .toList(),
+                        onChanged: (value) => theSex.text = value!,
+                        focusNode: theFocusSex,
+                        style: TextStyleTemplate.mediumPrimary(size: 16),
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                          isDense: true,
+                          hintText: "Jenis Kelamin Anda",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // *Email
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Email",
+                        style: TextStyle(
+                          color: ColourTemplate.grayColour,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextFormField(
+                        focusNode: theFocusEmail,
+                        controller: theEmail,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.only(
+                            bottom: 4,
+                            top: 8,
+                          ),
+                          hintText: "Alamat Email",
+                          isDense: true,
+                        ),
+                        cursorColor: ColourTemplate.primaryColour,
+                        style: const TextStyle(
+                          color: ColourTemplate.primaryColour,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // *Quotes
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Kata-Kata",
+                        style: TextStyle(
+                          color: ColourTemplate.grayColour,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextFormField(
+                        focusNode: theFocusQuotes,
+                        controller: theQuotes,
+                        maxLines: null,
+                        maxLength: null,
+                        keyboardType: TextInputType.multiline,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.only(
+                            bottom: 4,
+                            top: 8,
+                          ),
+                          hintText: "Kata-kata",
+                          isDense: true,
+                        ),
+                        cursorColor: ColourTemplate.primaryColour,
+                        style: const TextStyle(
+                          color: ColourTemplate.primaryColour,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // *Level
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Level",
+                        style: TextStyle(
+                          color: ColourTemplate.grayColour,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      DropdownButtonFormField<String>(
+                        items: <String>["Admin", "Karyawan"]
+                            .map<DropdownMenuItem<String>>(
+                                (value) => DropdownMenuItem<String>(
+                                      child: Text(value),
+                                      value: value,
+                                    ))
+                            .toList(),
+                        onChanged: (value) => theLevel.text = value!,
+                        focusNode: theFocusLevel,
+                        style: TextStyleTemplate.mediumPrimary(size: 16),
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: ColourTemplate.primaryColour,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                          isDense: true,
+                          hintText: "Level Keanggotaan",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // *Done Button
+                Visibility(
+                  visible: !visibleLoadingPanel,
+                  child: Container(
+                    margin: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      color: ColourTemplate.primaryColour,
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        splashColor: Colors.black.withOpacity(.25),
+                        highlightColor: Colors.black.withOpacity(.25),
+                        onTap: () => _addNewEmployee(context),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          alignment: Alignment.center,
+                          child: const Text(
+                            "TAMBAHKAN",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // *Loading Panel
+                Visibility(
+                  visible: visibleLoadingPanel,
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.all(12),
+                    height: 36,
+                    width: 36,
+                    child: const CircularProgressIndicator(
+                      color: ColourTemplate.primaryColour,
+                      strokeWidth: 4,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

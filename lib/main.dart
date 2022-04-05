@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:min_absen/models/agenda_model.dart';
 import 'package:min_absen/models/present_model.dart';
 import 'package:min_absen/models/profile_model.dart';
 import 'package:min_absen/models/users_model.dart';
 import 'package:min_absen/screens/detail_employee_screen.dart';
 import 'package:min_absen/screens/list_employee_screen.dart';
+import 'package:min_absen/screens/new_agenda_screen.dart';
 import 'package:min_absen/templates/colour_template.dart';
 import 'package:min_absen/firebase_options.dart';
 import 'package:min_absen/screens/home_screen.dart';
@@ -25,12 +27,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // static bool isUserDataExist = false;
-
-  // Stream<void> checkUserData() async* {
-  //   isUserDataExist = await getCurrentUserData() != null ? true : false;
-  // }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -39,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<UsersModel>(create: (context) => UsersModel()),
         ChangeNotifierProvider<ProfileModel>(create: (context) => ProfileModel()),
         ChangeNotifierProvider<PresentModel>(create: (context) => PresentModel()),
+        ChangeNotifierProvider<AgendaModel>(create: (context) => AgendaModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -59,6 +56,7 @@ class MyApp extends StatelessWidget {
           NewEmployeeScreen.route: (context) =>const NewEmployeeScreen(),
           ListEmployeeScreen.route: (context) => const ListEmployeeScreen(),
           DetailEmployeeScreen.route: (context) => const DetailEmployeeScreen(),
+          NewAgendaScreen.route: (context) => const NewAgendaScreen(),
         },
       ),
     );
