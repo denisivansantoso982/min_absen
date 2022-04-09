@@ -5,7 +5,9 @@ import 'package:min_absen/models/agenda_model.dart';
 import 'package:min_absen/models/present_model.dart';
 import 'package:min_absen/models/profile_model.dart';
 import 'package:min_absen/models/users_model.dart';
+import 'package:min_absen/screens/detail_agenda_screen.dart';
 import 'package:min_absen/screens/detail_employee_screen.dart';
+import 'package:min_absen/screens/list_agenda_screen.dart';
 import 'package:min_absen/screens/list_employee_screen.dart';
 import 'package:min_absen/screens/new_agenda_screen.dart';
 import 'package:min_absen/templates/colour_template.dart';
@@ -57,6 +59,8 @@ class MyApp extends StatelessWidget {
           ListEmployeeScreen.route: (context) => const ListEmployeeScreen(),
           DetailEmployeeScreen.route: (context) => const DetailEmployeeScreen(),
           NewAgendaScreen.route: (context) => const NewAgendaScreen(),
+          ListAgendaScreen.route: (context) => const ListAgendaScreen(),
+          DetailAgendaScreen.route: (context) => const DetailAgendaScreen(),
         },
       ),
     );

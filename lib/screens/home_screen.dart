@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   static const String route = '/home_screen';
   static DateTime today = DateTime.now();
 
-  _doGetUsers(context) async {
+  _doGetUsers(BuildContext context) async {
     try {
       await getAllUsers(context);
     } catch (error) {
@@ -45,9 +45,39 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
-  _doGetPresent(context) async {
+  _doGetPresent(BuildContext context) async {
     try {
       await getAllPresentData(context, null);
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            "Terjadi Kesalahan!",
+            style: TextStyleTemplate.boldGray(size: 18),
+          ),
+          content: Text(
+            error.toString(),
+            style: TextStyleTemplate.regularGray(size: 14),
+          ),
+          actions: [
+            MaterialButton(
+              color: ColourTemplate.primaryColour,
+              child: Text(
+                "OKE",
+                style: TextStyleTemplate.mediumWhite(size: 16),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  _doGetAgenda(BuildContext context) async {
+    try {
+      await getTheAgenda(context, null);
     } catch (error) {
       showDialog(
         context: context,
@@ -79,6 +109,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     _doGetUsers(context);
     _doGetPresent(context);
+    _doGetAgenda(context);
     return Scaffold(
       backgroundColor: ColourTemplate.whiteColour,
       appBar: PreferredSize(

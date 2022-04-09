@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:min_absen/firebase/database.dart';
 import 'package:min_absen/templates/alert_dialog_template.dart';
@@ -152,7 +153,7 @@ class _NewAgendaScreenState extends State<NewAgendaScreen> {
         });
         Map<String, dynamic> agendaData = <String, dynamic>{
           'agenda_name': theAgendaName.text,
-          'detail_agenda': theAgendaDetail.text,
+          'agenda_detail': theAgendaDetail.text,
           'agenda_start_at': agendaStartDate.millisecondsSinceEpoch,
           'agenda_end_at': agendaEndDate.millisecondsSinceEpoch,
         };
@@ -360,6 +361,8 @@ class _NewAgendaScreenState extends State<NewAgendaScreen> {
                         TextFormField(
                           focusNode: theFocusName,
                           controller: theAgendaName,
+                          maxLength: 30,
+                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           decoration: const InputDecoration(
                             border: UnderlineInputBorder(
                               borderSide: BorderSide(

@@ -2,14 +2,14 @@ class AgendaData {
   AgendaData({
     required this.uid,
     required this.agendaName,
-    required this.detailAgenda,
+    required this.agendaDetail,
     required this.agendaStartAt,
     required this.agendaEndAt,
   });
 
   String uid;
   String agendaName;
-  String detailAgenda;
-  String agendaStartAt;
-  String agendaEndAt;
+  String agendaDetail;
+  DateTime agendaStartAt;
+  DateTime agendaEndAt;
 }
