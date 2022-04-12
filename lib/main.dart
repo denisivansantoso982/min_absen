@@ -11,7 +11,6 @@ import 'package:min_absen/screens/list_agenda_screen.dart';
 import 'package:min_absen/screens/list_employee_screen.dart';
 import 'package:min_absen/screens/new_agenda_screen.dart';
 import 'package:min_absen/templates/colour_template.dart';
-import 'package:min_absen/firebase_options.dart';
 import 'package:min_absen/screens/home_screen.dart';
 import 'package:min_absen/screens/list_absen_screen.dart';
 import 'package:min_absen/screens/login_screen.dart';
@@ -22,7 +21,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

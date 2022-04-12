@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:min_absen/firebase/database.dart';
+import 'package:min_absen/models/profile_model.dart';
 import 'package:min_absen/screens/profile_screen.dart';
 import 'package:min_absen/templates/colour_template.dart';
 import 'package:min_absen/templates/text_style_template.dart';
@@ -8,12 +9,13 @@ import 'package:min_absen/widgets/appbar_widget.dart';
 import 'package:min_absen/widgets/employee_card_widget.dart';
 import 'package:min_absen/widgets/agenda_card_widget.dart';
 import 'package:min_absen/widgets/today_card_widget.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   static const String route = '/home_screen';
-  static DateTime today = DateTime.now();
+  static DateTime today = DateTime.now().toLocal();
 
   _doGetUsers(BuildContext context) async {
     try {
@@ -147,16 +149,20 @@ class HomeScreen extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () =>
                         Navigator.of(context).pushNamed(ProfileScreen.route),
-                    child: const SizedBox(
+                    child: SizedBox(
                       width: 45,
                       height: 45,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(48)),
-                        child: Image(
-                          image: AssetImage("assets/images/avatar.jpeg"),
-                          width: 45,
-                          height: 45,
-                          fit: BoxFit.cover,
+                        borderRadius: const BorderRadius.all(Radius.circular(48)),
+                        child: Container(
+                          color: ColourTemplate.primaryColour,
+                          alignment: Alignment.center,
+                          child: Text(
+                            context.watch<ProfileModel>().theProfile != null
+                              ? context.watch<ProfileModel>().theProfile!.name[0]
+                              : '',
+                            style: TextStyleTemplate.boldWhite(size: 24),
+                          ),
                         ),
                       ),
                     ),

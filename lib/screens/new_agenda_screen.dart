@@ -94,7 +94,7 @@ class _NewAgendaScreenState extends State<NewAgendaScreen> {
   void _doSelectEndDate(BuildContext context) async {
     final selectedDate = await showDatePicker(
       context: context,
-      initialDate: agendaStartDate,
+      initialDate: agendaEndDate,
       firstDate: agendaStartDate,
       lastDate: DateTime(2200),
       helpText: "PILIH TANGGAL",
@@ -111,7 +111,7 @@ class _NewAgendaScreenState extends State<NewAgendaScreen> {
     final selectTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(
-          hour: agendaEndDate.add(const Duration(hours: 1)).hour,
+          hour: agendaEndDate.add(const Duration(seconds: 1)).hour,
           minute: agendaEndDate.minute),
       initialEntryMode: TimePickerEntryMode.dial,
       helpText: "PILIH WAKTU",
@@ -138,10 +138,8 @@ class _NewAgendaScreenState extends State<NewAgendaScreen> {
       );
       String resultString =
           DateFormat("EEEE, dd MMMM yyyy - HH:mm").format(result);
-      if (agendaEndDate.isBefore(agendaStartDate)) {
-        agendaEndDate = result;
-        theAgendaEnd.text = resultString;
-      }
+      agendaEndDate = result;
+      theAgendaEnd.text = resultString;
     }
   }
 

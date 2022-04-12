@@ -5,7 +5,6 @@ import 'package:min_absen/screens/detail_agenda_screen.dart';
 import 'package:min_absen/templates/colour_template.dart';
 import 'package:min_absen/templates/text_style_template.dart';
 import 'package:min_absen/widgets/appbar_widget.dart';
-import 'package:min_absen/widgets/list_item_widget.dart';
 import 'package:provider/provider.dart';
 
 class ListAgendaScreen extends StatelessWidget {

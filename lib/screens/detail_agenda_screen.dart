@@ -131,7 +131,7 @@ class _DetailAgendaScreenState extends State<DetailAgendaScreen> {
     final selectTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(
-          hour: agendaEndDate.add(const Duration(hours: 1)).hour,
+          hour: agendaEndDate.add(const Duration(seconds: 1)).hour,
           minute: agendaEndDate.minute),
       initialEntryMode: TimePickerEntryMode.dial,
       helpText: "PILIH WAKTU",
@@ -158,10 +158,8 @@ class _DetailAgendaScreenState extends State<DetailAgendaScreen> {
       );
       String resultString =
           DateFormat("EEEE, dd MMMM yyyy - HH:mm").format(result);
-      if (agendaEndDate.isBefore(agendaStartDate)) {
-        agendaEndDate = result;
-        theAgendaEnd.text = resultString;
-      }
+      agendaEndDate = result;
+      theAgendaEnd.text = resultString;
     }
   }
 

@@ -1,6 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:min_absen/firebase/auth.dart';
 import 'package:min_absen/firebase/database.dart';
@@ -74,18 +73,18 @@ class LoginScreen extends StatelessWidget {
             Navigator.of(context).pushReplacementNamed(HomeScreen.route);
           }
         } else {
-          Navigator.of(context).pop();
           signOut();
           throw Exception('Pengguna tidak ditemukan!');
         }
+      } else {
+        Navigator.of(context).pop();
       }
-    } on PlatformException catch (error) {
-      print(error);
     } catch (error) {
+      Navigator.of(context).pop();
       AlertDialogTemplate().showTheDialog(
         context: context,
         title: "Terjadi Kesalahan!",
-        content: error.toString(),
+        content: error.toString().replaceAll('Exception: ', ''),
         actions: <Widget>[
           MaterialButton(
             child: Text(
@@ -93,7 +92,9 @@ class LoginScreen extends StatelessWidget {
               style: TextStyleTemplate.mediumWhite(size: 16),
             ),
             color: ColourTemplate.primaryColour,
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
         ],
       );

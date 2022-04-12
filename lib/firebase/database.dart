@@ -18,8 +18,7 @@ Future<DataSnapshot?> checkUserByEmail(String? email) async {
       .equalTo(email)
       .get()
       .onError((error, stackTrace) => Future.error(error!, stackTrace));
-  if (dataSnapshot.children.first.child('level').value.toString() != 'Admin' ||
-      !dataSnapshot.exists) {
+  if (!dataSnapshot.exists || dataSnapshot.children.first.child('level').value.toString() != 'Admin') {
     return null;
   }
   return dataSnapshot;
@@ -100,7 +99,8 @@ Future<void> getTheAgenda(BuildContext context, DateTime? theDate) async {
   int timestamp =
       theDate?.millisecondsSinceEpoch ?? DateTime.now().millisecondsSinceEpoch;
   agendaReference
-      .endAt(timestamp, key: 'agenda_end_at')
+      .orderByChild('agenda_end_at')
+      .startAt(timestamp, key: 'agenda_end_at')
       .onValue
       .listen((event) {
     Provider.of<AgendaModel>(context, listen: false).clearAgenda();

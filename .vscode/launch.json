@@ -10,10 +10,10 @@
       "type": "dart"
     },
     {
-      "name": "min_absen (profile mode)",
+      "name": "min_absen",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
-    }
+    },
   ]
 }
