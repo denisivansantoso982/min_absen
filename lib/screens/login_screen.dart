@@ -31,26 +31,18 @@ class LoginScreen extends StatelessWidget {
             await checkUserByEmail(googleUser.email);
         if (userOnDatabase != null) {
           await authenticateEmail(googleUser);
-          final dataUser = userOnDatabase.children.first.children.toSet();
           late String name, email, sex, level, quotes, uid;
           late DateTime birthDate;
-          for (var element in dataUser) {
-            uid = userOnDatabase.children.first.key ?? '';
-            if (element.key == 'name') {
-              name = element.value.toString();
-            } else if (element.key == 'sex') {
-              sex = element.value.toString();
-            } else if (element.key == 'level') {
-              level = element.value.toString();
-            } else if (element.key == 'quotes') {
-              quotes = element.value.toString();
-            } else if (element.key == 'email') {
-              email = element.value.toString();
-            } else if (element.key == 'date_of_birth') {
-              birthDate = DateTime.fromMillisecondsSinceEpoch(
-                  int.parse(element.value.toString()));
-            }
-          }
+          late bool isActive;
+          uid = userOnDatabase.children.first.key.toString();
+          name = userOnDatabase.children.first.child('name').value.toString();
+          sex = userOnDatabase.children.first.child('sex').value.toString();
+          level = userOnDatabase.children.first.child('level').value.toString();
+          quotes = userOnDatabase.children.first.child('quotes').value.toString();
+          email = userOnDatabase.children.first.child('email').value.toString();
+          birthDate = DateTime.fromMillisecondsSinceEpoch(
+              int.parse(userOnDatabase.children.first.child('date_of_birth').value.toString()));
+          isActive = userOnDatabase.children.first.child('is_active').value as bool;
           Provider.of<ProfileModel>(context, listen: false).fillProfile(
             UsersData(
               uid: uid,
@@ -60,6 +52,7 @@ class LoginScreen extends StatelessWidget {
               quotes: quotes,
               email: email,
               role: level,
+              isActive: isActive,
             ),
           );
           bool isStored = Provider.of<ProfileModel>(context, listen: false)

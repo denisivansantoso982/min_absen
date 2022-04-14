@@ -7,6 +7,7 @@ class UsersData {
     required this.quotes,
     required this.email,
     required this.role,
+    required this.isActive,
   });
 
   String uid;
@@ -16,4 +17,5 @@ class UsersData {
   String quotes;
   String email;
   String role;
+  bool isActive;
 }

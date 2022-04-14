@@ -73,6 +73,7 @@ class ListEmployeeScreen extends StatelessWidget {
                 ),
                 child: ListItemWidget(
                   name: users.theListOfUsers.elementAt(index).name,
+                  status: users.theListOfUsers.elementAt(index).isActive,
                 ),
               );
             },

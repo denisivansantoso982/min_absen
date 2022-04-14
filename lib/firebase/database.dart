@@ -18,7 +18,9 @@ Future<DataSnapshot?> checkUserByEmail(String? email) async {
       .equalTo(email)
       .get()
       .onError((error, stackTrace) => Future.error(error!, stackTrace));
-  if (!dataSnapshot.exists || dataSnapshot.children.first.child('level').value.toString() != 'Admin') {
+  if (!dataSnapshot.exists
+    || dataSnapshot.children.first.child('level').value.toString() != 'Admin'
+    || dataSnapshot.children.first.child('is_active').value.toString() != 'true') {
     return null;
   }
   return dataSnapshot;
@@ -28,6 +30,7 @@ Future<void> getAllUsers(BuildContext context) async {
   usersReference.onValue.listen((event) {
     Provider.of<UsersModel>(context, listen: false).clearAllUsers();
     List<DataSnapshot> data = event.snapshot.children.toList();
+    data.sort((a, b) => b.child('is_active').value.toString().compareTo(a.child('is_active').value.toString()));
     for (var element in data) {
       Provider.of<UsersModel>(context, listen: false).getAllUsers(
         UsersData(
@@ -39,6 +42,7 @@ Future<void> getAllUsers(BuildContext context) async {
           quotes: element.child('quotes').value.toString(),
           email: element.child('email').value.toString(),
           role: element.child('level').value.toString(),
+          isActive: element.child('is_active').value as bool,
         ),
       );
     }
@@ -57,6 +61,7 @@ Future<void> doUpdateUser(UsersData user) async {
     'email': user.email,
     'level': user.role,
     'quotes': user.quotes,
+    'is_active': user.isActive,
   }).catchError((error) => Future.error(error));
 }
 

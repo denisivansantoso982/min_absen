@@ -33,6 +33,7 @@ class SplashScreen extends StatelessWidget {
             quotes: dataSnapshot.children.first.child('quotes').value.toString(),
             email: dataSnapshot.children.first.child('email').value.toString(),
             role: dataSnapshot.children.first.child('level').value.toString(),
+            isActive: dataSnapshot.children.first.child('is_active').value as bool,
           ));
         } else {
           user = null;

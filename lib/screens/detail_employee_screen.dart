@@ -28,14 +28,17 @@ class _DetailEmployeeScreenState extends State<DetailEmployeeScreen> {
   final TextEditingController theRole = TextEditingController(text: '');
   final TextEditingController theQuotes = TextEditingController(text: '');
   final TextEditingController theBirthDate = TextEditingController(text: '');
+  final TextEditingController theActive = TextEditingController(text: '');
   final FocusNode theFocusName = FocusNode();
   final FocusNode theFocusSex = FocusNode();
   final FocusNode theFocusEmail = FocusNode();
   final FocusNode theFocusRole = FocusNode();
   final FocusNode theFocusQuotes = FocusNode();
   final FocusNode theFocusBirthDate = FocusNode();
+  final FocusNode theFocusActive = FocusNode();
   final List<String> sexOptions = <String>['Pria', 'Wanita'];
   final List<String> roleOptions = <String>['Admin', 'Karyawan'];
+  final List<String> statusOptions = <String>['Aktif', 'Nonaktif'];
 
   void _initial(BuildContext context) {
     String uid = ModalRoute.of(context)!.settings.arguments as String;
@@ -53,6 +56,7 @@ class _DetailEmployeeScreenState extends State<DetailEmployeeScreen> {
     theRole.text = data.role;
     theQuotes.text = data.quotes;
     theBirthDate.text = DateFormat('EEEE, dd MMMM yyyy').format(birthDate);
+    theActive.text = statusOptions.elementAt(data.isActive ? 0 : 1);
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -97,6 +101,7 @@ class _DetailEmployeeScreenState extends State<DetailEmployeeScreen> {
           quotes: theQuotes.text,
           email: theEmail.text,
           role: theRole.text,
+          isActive: theActive.text == 'Aktif' ? true : false,
         );
         await doUpdateUser(user);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -204,6 +209,19 @@ class _DetailEmployeeScreenState extends State<DetailEmployeeScreen> {
         SnackBar(
           content: Text(
             'Kata-Kata tidak boleh kosong!',
+            style: TextStyleTemplate.regularWhite(size: 14),
+          ),
+          backgroundColor: ColourTemplate.negativeColour,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return false;
+    } else if (theActive.text == '' || theActive.text.isEmpty) {
+      theFocusActive.requestFocus();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Status pengguna tidak boleh kosong!',
             style: TextStyleTemplate.regularWhite(size: 14),
           ),
           backgroundColor: ColourTemplate.negativeColour,
@@ -617,6 +635,63 @@ class _DetailEmployeeScreenState extends State<DetailEmployeeScreen> {
                     ],
                   ),
                 ),
+                // *Role
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Status",
+                        style: TextStyleTemplate.mediumGray(size: 18),
+                      ),
+                      DropdownButtonFormField(
+                        items: statusOptions
+                            .map<DropdownMenuItem<String>>(
+                                (element) => DropdownMenuItem<String>(
+                                      child: Text(element),
+                                      value: element,
+                                    ))
+                            .toList(),
+                        value: theActive.text,
+                        focusNode: theFocusActive,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: ColourTemplate.primaryColour,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: ColourTemplate.primaryColour,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: ColourTemplate.primaryColour,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          hintText: "Status",
+                          isDense: true,
+                          contentPadding: EdgeInsets.only(
+                            bottom: 4,
+                            top: 8,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          theActive.text = value as String;
+                        },
+                        style: TextStyleTemplate.mediumPrimary(size: 16),
+                      ),
+                    ],
+                  ),
+                ),
                 // *Update Button
                 Container(
                   margin: const EdgeInsets.all(12),
@@ -633,8 +708,10 @@ class _DetailEmployeeScreenState extends State<DetailEmployeeScreen> {
                       child: Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text("PERBARUI",
-                            style: TextStyleTemplate.boldWhite(size: 18)),
+                        child: Text(
+                          "PERBARUI",
+                          style: TextStyleTemplate.boldWhite(size: 18),
+                        ),
                       ),
                     ),
                   ),

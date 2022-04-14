@@ -70,7 +70,8 @@ class _NewEmployeeScreenState extends State<NewEmployeeScreen> {
               "sex": theSex.text,
               "quotes": theQuotes.text,
               "email": theEmail.text,
-              "level": theLevel.text
+              "level": theLevel.text,
+              "is_active": true
             }).then((value) {
               AlertDialogTemplate().showTheDialog(
                 context: context,

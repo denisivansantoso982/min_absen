@@ -3,8 +3,10 @@ import 'package:min_absen/templates/colour_template.dart';
 import 'package:min_absen/templates/text_style_template.dart';
 
 class ListItemWidget extends StatelessWidget {
-  const ListItemWidget({Key? key, required this.name, this.pretend, this.home}) : super(key: key);
+  const ListItemWidget({Key? key, required this.name, this.status, this.pretend, this.home})
+      : super(key: key);
   final String name;
+  final bool? status;
   final String? pretend;
   final String? home;
 
@@ -27,26 +29,44 @@ class ListItemWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            name,
-            style: TextStyleTemplate.mediumGray(size: 14),
-          ),
-          const SizedBox(height: 8,),
-          ( (pretend != null) ? (Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  pretend!,
-                  style: TextStyleTemplate.mediumPrimary(size: 14),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  name,
+                  style: TextStyleTemplate.mediumGray(size: 14),
                 ),
-                ( (home != null) ? (Text(
-                  home!,
-                  style: TextStyleTemplate.mediumPrimary(size: 14),
-                )) : const SizedBox()
-                ),
-              ],
-            )) : const SizedBox()
+              ),
+              ( status != null
+                ? Text(
+                  status! ? 'Aktif' : 'Nonaktif',
+                  style: status!
+                    ? TextStyleTemplate.regularPrimary(size: 12)
+                    : TextStyleTemplate.regularNegative(size: 12),
+                )
+                : const SizedBox()),
+            ],
           ),
+          const SizedBox(
+            height: 8,
+          ),
+          ((pretend != null)
+              ? (Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      pretend!,
+                      style: TextStyleTemplate.mediumPrimary(size: 14),
+                    ),
+                    ((home != null)
+                        ? (Text(
+                            home!,
+                            style: TextStyleTemplate.mediumPrimary(size: 14),
+                          ))
+                        : const SizedBox()),
+                  ],
+                ))
+              : const SizedBox()),
         ],
       ),
     );
