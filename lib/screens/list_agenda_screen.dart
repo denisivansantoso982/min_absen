@@ -111,12 +111,24 @@ class ListAgendaScreen extends StatelessWidget {
                             )
                           ]
                         ),
-                        child: Wrap(
+                        child: Row(
                           children: [
+                            Expanded(
+                              child: Wrap(
+                                children: [
+                                  Text(
+                                    agenda.theListOfAgenda[index].agendaName,
+                                    style: TextStyleTemplate.boldGray(size: 16),
+                                    overflow: TextOverflow.clip,
+                                  ),
+                                ],
+                              ),
+                            ),
                             Text(
-                              agenda.theListOfAgenda[index].agendaName,
-                              style: TextStyleTemplate.boldGray(size: 16),
-                              overflow: TextOverflow.clip,
+                              agenda.theListOfAgenda[index].isActive ? 'Aktif' : 'Nonaktif',
+                              style: agenda.theListOfAgenda[index].isActive
+                                  ? TextStyleTemplate.regularPrimary(size: 11)
+                                  : TextStyleTemplate.regularNegative(size: 11),
                             ),
                           ],
                         ),

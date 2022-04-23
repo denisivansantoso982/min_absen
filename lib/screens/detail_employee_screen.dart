@@ -21,24 +21,24 @@ class DetailEmployeeScreen extends StatefulWidget {
 class _DetailEmployeeScreenState extends State<DetailEmployeeScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime birthDate = DateTime.now();
-  final TextEditingController theUid = TextEditingController(text: '');
-  final TextEditingController theName = TextEditingController(text: '');
-  final TextEditingController theSex = TextEditingController(text: '');
-  final TextEditingController theEmail = TextEditingController(text: '');
-  final TextEditingController theRole = TextEditingController(text: '');
-  final TextEditingController theQuotes = TextEditingController(text: '');
-  final TextEditingController theBirthDate = TextEditingController(text: '');
-  final TextEditingController theActive = TextEditingController(text: '');
-  final FocusNode theFocusName = FocusNode();
-  final FocusNode theFocusSex = FocusNode();
-  final FocusNode theFocusEmail = FocusNode();
-  final FocusNode theFocusRole = FocusNode();
-  final FocusNode theFocusQuotes = FocusNode();
-  final FocusNode theFocusBirthDate = FocusNode();
-  final FocusNode theFocusActive = FocusNode();
-  final List<String> sexOptions = <String>['Pria', 'Wanita'];
-  final List<String> roleOptions = <String>['Admin', 'Karyawan'];
-  final List<String> statusOptions = <String>['Aktif', 'Nonaktif'];
+  TextEditingController theUid = TextEditingController(text: '');
+  TextEditingController theName = TextEditingController(text: '');
+  TextEditingController theSex = TextEditingController(text: '');
+  TextEditingController theEmail = TextEditingController(text: '');
+  TextEditingController theRole = TextEditingController(text: '');
+  TextEditingController theQuotes = TextEditingController(text: '');
+  TextEditingController theBirthDate = TextEditingController(text: '');
+  TextEditingController theActive = TextEditingController(text: '');
+  FocusNode theFocusName = FocusNode();
+  FocusNode theFocusSex = FocusNode();
+  FocusNode theFocusEmail = FocusNode();
+  FocusNode theFocusRole = FocusNode();
+  FocusNode theFocusQuotes = FocusNode();
+  FocusNode theFocusBirthDate = FocusNode();
+  FocusNode theFocusActive = FocusNode();
+  List<String> sexOptions = <String>['Pria', 'Wanita'];
+  List<String> roleOptions = <String>['Admin', 'Karyawan'];
+  List<String> statusOptions = <String>['Aktif', 'Nonaktif'];
 
   void _initial(BuildContext context) {
     String uid = ModalRoute.of(context)!.settings.arguments as String;
@@ -635,7 +635,7 @@ class _DetailEmployeeScreenState extends State<DetailEmployeeScreen> {
                     ],
                   ),
                 ),
-                // *Role
+                // *Status
                 Container(
                   margin: const EdgeInsets.all(12),
                   child: Column(

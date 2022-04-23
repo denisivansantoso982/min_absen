@@ -26,13 +26,14 @@ class _DetailAgendaScreenState extends State<DetailAgendaScreen> {
   TextEditingController theAgendaDetail = TextEditingController();
   TextEditingController theAgendaStart = TextEditingController();
   TextEditingController theAgendaEnd = TextEditingController();
+  TextEditingController theActive = TextEditingController(text: '');
   FocusNode theFocusName = FocusNode();
   FocusNode theFocusDetail = FocusNode();
+  FocusNode theFocusActive = FocusNode();
   bool visibleLoadingPanel = false;
+  List<String> statusOptions = <String>['Aktif', 'Nonaktif'];
 
-  @override
-  void initState() {
-    super.initState();
+  void initial() {
     theAgendaStart.text =
         DateFormat("EEEE, dd MMMM yyyy - HH:mm").format(agendaStartDate);
     theAgendaEnd.text =
@@ -53,6 +54,7 @@ class _DetailAgendaScreenState extends State<DetailAgendaScreen> {
           DateFormat("EEEE, dd MMMM yyyy - HH:mm").format(agendaStartDate);
       theAgendaEnd.text =
           DateFormat("EEEE, dd MMMM yyyy - HH:mm").format(agendaEndDate);
+      theActive.text = statusOptions.elementAt(agenda.isActive ? 0 : 1);
     });
   }
 
@@ -175,6 +177,7 @@ class _DetailAgendaScreenState extends State<DetailAgendaScreen> {
           agendaDetail: theAgendaDetail.text,
           agendaStartAt: agendaStartDate,
           agendaEndAt: agendaEndDate,
+          isActive: theActive.text == 'Aktif' ? true : false,
         ));
         AlertDialogTemplate().showTheDialog(
           context: context,
@@ -274,6 +277,7 @@ class _DetailAgendaScreenState extends State<DetailAgendaScreen> {
   @override
   Widget build(BuildContext context) {
     final String uid = ModalRoute.of(context)!.settings.arguments as String;
+    initial();
     _doGetAgendaDetail(context, uid);
     return Scaffold(
       appBar: PreferredSize(
@@ -615,6 +619,63 @@ class _DetailAgendaScreenState extends State<DetailAgendaScreen> {
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+                // *Status
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Status",
+                        style: TextStyleTemplate.mediumGray(size: 18),
+                      ),
+                      DropdownButtonFormField(
+                        items: statusOptions
+                            .map<DropdownMenuItem<String>>(
+                                (element) => DropdownMenuItem<String>(
+                                      child: Text(element),
+                                      value: element,
+                                    ))
+                            .toList(),
+                        value: theActive.text,
+                        focusNode: theFocusActive,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: ColourTemplate.primaryColour,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: ColourTemplate.primaryColour,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: ColourTemplate.primaryColour,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          hintText: "Status",
+                          isDense: true,
+                          contentPadding: EdgeInsets.only(
+                            bottom: 4,
+                            top: 8,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          theActive.text = value as String;
+                        },
+                        style: TextStyleTemplate.mediumPrimary(size: 16),
                       ),
                     ],
                   ),

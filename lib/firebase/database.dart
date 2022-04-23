@@ -126,6 +126,7 @@ Future<void> getTheAgenda(BuildContext context, DateTime? theDate) async {
           agendaEndAt: DateTime.fromMillisecondsSinceEpoch(int.parse(
             element.child('agenda_end_at').value.toString(),
           )),
+          isActive: element.child('is_active').value as bool,
         ),
       );
     }
@@ -138,5 +139,6 @@ Future<void> doEditAgenda(AgendaData agenda) async {
     'agenda_start_at': agenda.agendaStartAt.millisecondsSinceEpoch,
     'agenda_end_at': agenda.agendaEndAt.millisecondsSinceEpoch,
     'agenda_detail': agenda.agendaDetail,
+    'is_active': agenda.isActive,
   });
 }

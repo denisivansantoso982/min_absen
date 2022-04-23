@@ -45,8 +45,9 @@ class AgendaCardWidget extends StatelessWidget {
                           Text(
                             agenda.theListOfAgenda.isNotEmpty
                               ? DateFormat('dd').format(agenda.theListOfAgenda[0].agendaStartAt)
-                              : "Tidak Ada Agenda",
-                            style: TextStyleTemplate.boldWhite(size: 28),
+                              : "Tidak Ada",
+                            style: TextStyleTemplate.boldWhite(size: agenda.theListOfAgenda.isNotEmpty ? 28 : 18),
+                            softWrap: true,
                           ),
                           const SizedBox(width: 4,),
                           Column(

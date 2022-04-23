@@ -154,6 +154,7 @@ class _NewAgendaScreenState extends State<NewAgendaScreen> {
           'agenda_detail': theAgendaDetail.text,
           'agenda_start_at': agendaStartDate.millisecondsSinceEpoch,
           'agenda_end_at': agendaEndDate.millisecondsSinceEpoch,
+          'is_active': true,
         };
         await doAddAgenda(agendaData);
         AlertDialogTemplate().showTheDialog(
